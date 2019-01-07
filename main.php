@@ -22,6 +22,6 @@ $t->process(
         }
     }
 );
-
+posix_setsid();
 exit(0);
 
