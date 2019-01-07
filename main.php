@@ -3,13 +3,14 @@ require 'ProcessHelp.php';
 require 'MsgQueue.php';
 //制造数据
 $list = [];
-for($i=0;$i<10;$i++){
+for($i=0;$i<50;$i++){
     $list[] = 'http://xxx.cn?a='.$i;
 }
 //执行任务
-run($list,1,function ($one){
+run($list,3,function ($one){
     sleep(1);
     echo $one.PHP_EOL;
+    echo getmypid().PHP_EOL;
 });
 
 
@@ -36,30 +37,39 @@ function run($msgList,$number,$callback){
     file_put_contents(__DIR__.'/pid.log',getmypid());
     $t->setNumber($number);
     $t->process(
-        function (ProcessHelp $_this) use ($callback) {
+        function (ProcessHelp $_this) use ($callback,$pid)  {
             while (  $l = $_this->getMq()->pop(1)) {
                 if(is_callable($callback)){
                     $callback($l);
                 }
             }
+            exit(0);
+
         }
     );
     pcntl_async_signals(true);
-    pcntl_signal(SIGUSR1,function () use($t,$number,$callback){
+    pcntl_signal(SIGUSR1,function () use($t,$number,$callback,$pid){
         //重启 逻辑  mac  kill -30 pid.log   linux kill -10 pid.log
         $t->killAll();
         $t->setNumber($number);
         $t->process(
-            function (ProcessHelp $_this) use ($callback) {
+            function (ProcessHelp $_this) use ($callback,$pid) {
                 while (  $l = $_this->getMq()->pop(1)) {
                     if(is_callable($callback)){
                         $callback($l);
                     }
                 }
+                exit(0);
             }
         );
     });
     while (true){
-        usleep(1000);
+        sleep(1);
+        $status = msg_stat_queue($msg_queue->queue);
+        if($status['msg_qnum']==0){
+            unlink(__DIR__.'/pid.log');
+            echo "task is success";
+            exit(0);
+        }
     }
 }
