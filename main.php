@@ -13,7 +13,8 @@ $msg_queue->push(2);
 $msg_queue->push(2);
 $msg_queue->push(2);
 $msg_queue->push(2);
-
+umask(0);
+posix_setsid();
 $t->process(
     function (ProcessHelp $_this) {
         while (  $l = $_this->getMq()->pop(1)) {
@@ -22,6 +23,6 @@ $t->process(
         }
     }
 );
-posix_setsid();
+
 exit(0);
 
