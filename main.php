@@ -28,43 +28,30 @@ function run($msgList,$number,$callback){
         $msg_queue->push($v);
     }
 //进程守护
-    umask(0);
-    posix_setsid();
+umask(0);
+posix_setsid();
 
-    $pid = pcntl_fork();
-    if ($pid>0){
-        exit(0);
-    }
-    file_put_contents(__DIR__.'/pid.log',getmypid());
-    $t->setNumber($number);
-    $t->process(
-        function (ProcessHelp $_this) use ($callback) {
-            while (  $l = $_this->getMq()->pop(1)) {
-                if(is_callable($callback)){
-                    $callback($l);
-                }
-            }
+$pid = pcntl_fork();
+if ($pid>0){
+    exit(0);
+}
+file_put_contents(__DIR__.'/pid.log',getmypid());
+$t->setNumber(1);
+$t->process(
+    function (ProcessHelp $_this) {
+        while (  $l = $_this->getMq()->pop(1)) {
+            sleep(1);
+            file_put_contents(__DIR__.'/test.txt',$l."\n\r",FILE_APPEND);
         }
-    );
-
-    pcntl_async_signals(true);
-    pcntl_signal(SIGUSR1,function () use($t,$number,$callback){
-        //重启 逻辑  mac  kill -30 pid.log   linux kill -10 pid.log
-        $t->killAll();
-        $t->setNumber($number);
-        $t->process(
-            function (ProcessHelp $_this) use ($callback) {
-                while (  $l = $_this->getMq()->pop(1)) {
-                    if(is_callable($callback)){
-                        $callback($l);
-                    }
-                }
-            }
-        );
-    });
-
-    while (true){
-        usleep(1000);
     }
+);
 
+pcntl_async_signals(true);
+pcntl_signal(SIGUSR1,function (){
+    //重启 逻辑  mac  kill -30 pid.log   linux kill -10 pid.log
+    file_put_contents(__DIR__.'/tt.log',1);
+});
+
+while (true){
+    usleep(1000);
 }
