@@ -8,6 +8,15 @@
 
 class Daemon
 {
+    protected static $sigUser1=null;
+    static function setSigUsser1Callback(callable $func){
+        Daemon::$sigUser1 = $func;
+    }
+
+    static function getSUC(){
+        return Daemon::$sigUser1;
+    }
+
     static function run(){
         //进程守护
         umask(0);
@@ -58,6 +67,9 @@ class Daemon
         switch ($signo) {
             case SIGUSR1:
 //                echo '触发信号(处理数据)'.PHP_EOL;
+                if (is_callable(Daemon::$sigUser1)){
+                    (Daemon::$sigUser1)();
+                }
                 break;
             case SIGUSR2:
 //                echo "进程回收处理\n";
