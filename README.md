@@ -5,7 +5,8 @@
   //重启 逻辑  mac  kill -30 pid.log   linux kill -10 pid.log
   
 执行任务
-```
+
+```php
 <?php
 
 require 'ProcessHelp.php';
