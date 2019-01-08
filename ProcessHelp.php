@@ -28,6 +28,7 @@ class ProcessHelp
                 $pid = pcntl_fork();
                 if ($pid == 0) {
                     $func($this);
+                    exit(0);
                 } else {
                     $this->threadNumber[$pid] = $pid;
                 }
