@@ -26,9 +26,10 @@ $callback = function ($one,MsgQueue $MsgQueue){
     $fileName = explode('/',$one);
     if($rs = Curl::run($one)){
         file_put_contents(__DIR__.'/A/'.$fileName[count($fileName)-1].'.html',$rs);
-    }else{
-        $MsgQueue->push($one,1);
     }
+//    else{
+//        $MsgQueue->push($one,1);
+//    }
 };
 //任务完成回调
 $success = function (){
