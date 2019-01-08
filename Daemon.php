@@ -68,7 +68,9 @@ class Daemon
             case SIGUSR1:
 //                echo '触发信号(处理数据)'.PHP_EOL;
                 if (is_callable(Daemon::$sigUser1)){
-                    (Daemon::$sigUser1)();
+                    pcntl_signal(SIGUSR1,function (){
+                        (Daemon::$sigUser1)();
+                    });
                 }
                 break;
             case SIGUSR2:
