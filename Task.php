@@ -10,11 +10,15 @@ class Task
 {
 
     /**
-     * @param $msgList //队列
-     * @param $number //开启进程数量
-     * @param $callback //回调函数
+     * run
+     * @param $msgList
+     * @param $number
+     * @param $callback
+     * @param callable $success
+     * @author yangzhenyu
+     * Time: 13:40
      */
-    static function run($msgList, $number, $callback)
+    static function run($msgList, $number, $callback,callable $success=null)
     {
         $msg_queue = new MsgQueue();
         $t = new ProcessHelp();
@@ -27,7 +31,7 @@ class Task
                 while (true) {
                     $l = $_this->getMq()->pop(1);
                     if (is_callable($callback)) {
-                        $callback($l);
+                        $callback($l,$_this->getMq());
                     }
                 }
             }
@@ -41,8 +45,10 @@ class Task
             sleep(1);
             $status = msg_stat_queue($msg_queue->queue);
             if ($status['msg_qnum'] == 0) {
-                echo 'task is success';
                 $t->killAll();
+                if(is_callable($success)){
+                    $success();
+                }
                 die(0);
             }
         }
