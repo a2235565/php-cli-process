@@ -8,7 +8,7 @@ Daemon::listenSign();
 //进程守护
 Daemon::run();
 //设置接到重启信号执行内容
-Daemon::setSigUsser1Callback(function (){
+Daemon::setSigUser1Callback(function (){
 
 });
 

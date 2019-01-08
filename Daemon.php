@@ -9,7 +9,7 @@
 class Daemon
 {
     protected static $sigUser1=null;
-    static function setSigUsser1Callback(callable $func){
+    static function setSigUser1Callback(callable $func){
         Daemon::$sigUser1 = $func;
     }
 
@@ -87,8 +87,12 @@ class Daemon
         }
         return;
     }
+
     /**
-     * 进程回收
+     * processRecycling
+     * @throws Exception
+     * @author yangzhenyu
+     * Time: 13:37
      */
     protected function processRecycling()
     {
