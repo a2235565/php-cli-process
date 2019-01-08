@@ -2,7 +2,8 @@
 - 多进程 cli模式下执行程序
 - 入口为 main
 
-
+  //重启 逻辑  mac  kill -30 pid.log   linux kill -10 pid.log
+  
 执行任务
 ```
 <?php
