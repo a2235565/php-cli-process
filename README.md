@@ -18,7 +18,24 @@ Daemon::listenSign();
 Daemon::run();
 //设置接到重启信号执行内容
 Daemon::setSigUser1Callback(function (){
-
+    Task::getProcess()->killAll();
+    Task::getProcess()->setMq(Task::getMsgQueue());
+    //$number  重新开启几个进程
+    $number = 3;
+    //你的业务逻辑
+    $callback = function(){};
+    
+    Task::getProcess()->setNumber($number);
+    Task::getProcess()->process(
+        function (ProcessHelp $_this) use ($callback) {
+            while (true) {
+                $msg = $_this->getMq()->pop(1);
+                if (is_callable($callback)) {
+                    $callback($msg,$_this->getMq());
+                }
+            }
+        }
+    );
 });
 
 //制造测试队列

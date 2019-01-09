@@ -22,6 +22,5 @@ class Curl
         }else{
             return false;
         }
-
     }
 }

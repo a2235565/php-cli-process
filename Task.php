@@ -8,6 +8,25 @@
 
 class Task
 {
+    /**
+     * getMsgQueue
+     * @return MsgQueue|null
+     * @author yangzhenyu
+     * Time: 09:51
+     */
+    static function getMsgQueue(){
+        return Register::get('msgQueue');
+    }
+
+    /**
+     * getProcess
+     * @return ProcessHelp|null
+     * @author yangzhenyu
+     * Time: 10:03
+     */
+    static function getProcess(){
+        return Register::get('Process');
+    }
 
     /**
      * run
@@ -22,8 +41,9 @@ class Task
     {
         $msg_queue = new MsgQueue();
         $t = new ProcessHelp();
+        Register::set('msgQueue',$msg_queue);
+        Register::set('Process',$t);
         $t->setMq($msg_queue);
-
         file_put_contents(__DIR__ . '/pid.log', getmypid());
         $t->setNumber($number);
         $t->process(
