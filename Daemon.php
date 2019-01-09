@@ -27,21 +27,6 @@ class Daemon
         }
     }
 
-    static function zombies(){
-        pcntl_signal(SIGCHLD, function () {
-            while (($pid = pcntl_waitpid(-1, $status, WUNTRACED)) != 0) {
-                // 退出的子进程pid
-                if ($pid > 0) {
-                    echo "fork成功\n";
-                } else {
-                    // 出错了
-                    throw new Exception('监控子进程退出发生错误');
-                }
-                usleep(1);
-            }
-
-        });
-    }
 
     /**
      * 监听信号
