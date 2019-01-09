@@ -11,6 +11,8 @@ require 'ProcessHelp.php';
 require 'MsgQueue.php';
 require 'Daemon.php';
 require 'Task.php';
+require 'Curl.php';
+require 'Register.php';
 //监听信号
 Daemon::listenSign();
 //进程守护
