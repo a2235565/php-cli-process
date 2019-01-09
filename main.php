@@ -14,10 +14,9 @@ Daemon::setSigUser1Callback(function (){
     Task::getProcess()->killAll();
     Task::getProcess()->setMq(Task::getMsgQueue());
     //$number  重新开启几个进程
-    $number = 3;
+    $number = 1;
     //你的业务逻辑
-    $callback = function(){};
-
+    $callback = function($msg,$queue){};
     Task::getProcess()->setNumber($number);
     Task::getProcess()->process(
         function (ProcessHelp $_this) use ($callback) {
@@ -46,9 +45,6 @@ $callback = function ($one,MsgQueue $MsgQueue){
     if($rs = Curl::run($one)){
         file_put_contents(__DIR__.'/A/'.$fileName[count($fileName)-1].'.html',$rs);
     }
-//    else{
-//        $MsgQueue->push($one,1);
-//    }
 };
 //任务完成回调
 $success = function (){

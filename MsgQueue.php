@@ -13,8 +13,7 @@ class MsgQueue
     }
     public function push($data, $type = 1)
     {
-        //若 纠结报错 开大 msg_queue 队列长度即可
-        @ $result = msg_send($this->queue, $type, $data);
+        $result = msg_send($this->queue, $type, $data);
         return $result;
     }
     public function pop($type = 0,$flags = MSG_IPC_NOWAIT)

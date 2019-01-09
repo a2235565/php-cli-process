@@ -22,16 +22,13 @@ class ProcessHelp
     }
     function process(callable $func)
     {
-        $my_pid = getmypid();
         for ($i = 0; $i < $this->number; $i++) {
-            if ($my_pid == getmypid()) {
-                $pid = pcntl_fork();
-                if ($pid == 0) {
-                    $func($this);
-                    exit(0);
-                } else {
-                    $this->threadNumber[$pid] = $pid;
-                }
+            $pid = pcntl_fork();
+            if ($pid == 0) {
+                $func($this);
+                exit(0);
+            } else {
+                $this->threadNumber[$pid] = $pid;
             }
         }
     }
