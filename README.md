@@ -17,7 +17,7 @@ require 'Register.php';
 Daemon::listenSign();
 //进程守护
 Daemon::run();
-//设置接到重启信号执行内容
+//设置接到重启信号执行内容  #没有软重启的需求忽略#
 Daemon::setSigUser1Callback(function (){
     //杀死目前所有任务
     Task::getProcess()->killAll();
