@@ -19,14 +19,18 @@ Daemon::listenSign();
 Daemon::run();
 //设置接到重启信号执行内容
 Daemon::setSigUser1Callback(function (){
+    //杀死目前所有任务
     Task::getProcess()->killAll();
+    //将队列重新写入新的 进程组 队列
     Task::getProcess()->setMq(Task::getMsgQueue());
     //$number  重新开启几个进程
     $number = 3;
     //你的业务逻辑
     $callback = function(){};
     
+    //设置进程数  若不设置则 为启动时设置参数
     Task::getProcess()->setNumber($number);
+    //开启
     Task::getProcess()->process(
         function (ProcessHelp $_this) use ($callback) {
             while (true) {
