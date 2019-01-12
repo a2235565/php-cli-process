@@ -32,6 +32,17 @@ class ProcessHelp
             }
         }
     }
+
+    function processOne(callable $func)
+    {
+        $pid = pcntl_fork();
+        if ($pid == 0) {
+            $func($this);
+            exit(0);
+        } else {
+            $this->threadNumber[$pid] = $pid;
+        }
+    }
     function kill($pid = null)
     {
         if (!empty($pid) && in_array($pid, $this->threadNumber)) {
