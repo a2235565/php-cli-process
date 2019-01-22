@@ -2,7 +2,7 @@
 - 多进程 cli模式下执行程序
 - 入口为 main
 - 重启 逻辑 mac kill -30 pid.log linux kill -10 pid.log
-- os 无法使用main ~ 请 使用 mainForRedis 或 mainForRedis.php 脚本运行
+- os 无法使用main ~ 请 使用 mainForRedis 或 mainForShm  脚本运行
 执行任务
 
 ```php
